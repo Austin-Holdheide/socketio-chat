@@ -1,4 +1,4 @@
-```
+
 # Chat App
 
 Welcome to the Chat App! This is a simple chat application built with Flask and Socket.IO.
