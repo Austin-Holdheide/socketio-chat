@@ -1,0 +1,4 @@
+# ignore ALL .log files
+*.json
+
+# ignore ALL files in ANY directory
