@@ -15,7 +15,7 @@ Welcome to the Chat App! This is a simple chat application built with Flask and 
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/Austin-Holdheide/chat-app.git
+   git clone https://github.com/Austin-Holdheide/socketio-chat.git
    ```
 
 2. Install the required dependencies:
