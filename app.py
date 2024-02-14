@@ -1,8 +1,9 @@
 from flask import Flask, render_template, request, session, redirect, url_for
 from flask_socketio import SocketIO, emit, join_room
 import json
+import zlib  # Add zlib for compression
 from time import time
-import os  # Add this import for handling file paths
+import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'cv4u8fvj8wr5tijm8345tjiwuj-5t80tu'
@@ -16,14 +17,21 @@ os.makedirs(JSON_FOLDER, exist_ok=True)
 
 def write_data_to_json(room, data):
     filename = os.path.join(JSON_FOLDER, f'{room}_data.json')
-    with open(filename, 'w') as json_file:
-        json.dump(data, json_file)
+    
+    # Compress the messages before writing to JSON file
+    compressed_data = zlib.compress(json.dumps(data).encode('utf-8'))
+    
+    with open(filename, 'wb') as json_file:
+        json_file.write(compressed_data)
 
 def read_data_from_json(room):
     filename = os.path.join(JSON_FOLDER, f'{room}_data.json')
     try:
-        with open(filename, 'r') as json_file:
-            data = json.load(json_file)
+        with open(filename, 'rb') as json_file:
+            compressed_data = json_file.read()
+            
+        # Decompress the data before loading it
+        data = json.loads(zlib.decompress(compressed_data).decode('utf-8'))
         return data
     except FileNotFoundError:
         return {'messages': []}
