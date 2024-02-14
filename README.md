@@ -54,6 +54,7 @@ Feel free to contribute to the project! Fork the repository, make your changes, 
 - `sqlserver3`: Planing to has a sql database to mange chat data insteed of tons of json files.
 - `Active Conections`: Planing to add a box to the side that has all the people connected to a room.
 - `accounts`: Make accounts to have a DM service on it.
+- `HTTPS support`: This one is self explantory.
 
 ## License
 
