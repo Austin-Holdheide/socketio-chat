@@ -12,6 +12,10 @@ socketio = SocketIO(app)
 # Define the folder path
 JSON_FOLDER = 'chatjson'
 
+# Define Blocked Usernames
+
+blocked = ["Server", "Admin", "BlockedUser"]
+
 # Create the folder if it doesn't exist
 os.makedirs(JSON_FOLDER, exist_ok=True)
 
@@ -43,6 +47,12 @@ def index():
 @app.route('/chat')
 def chat():
     username = request.args.get('username')
+    
+    # Check for blocked username
+    if username.lower() in map(str.lower, blocked):
+        print(username + " was blocked from use")
+        return redirect(url_for('index'))
+
     room = request.args.get('room')
     if username and room:
         session['username'] = username
@@ -56,24 +66,27 @@ def chat():
 def handle_join(data):
     username = data['username']
     room = data['room']
-    session['username'] = username
-    session['room'] = room
-    join_room(room)
 
-    # Load previous messages for the chat room
-    data = read_data_from_json(room)
-    messages = data.get('messages', [])
-    emit('load_messages', {'messages': messages})
+    if username.lower() in map(str.lower, blocked):
+        print("Blocked username join message")
+    else:
+        session['username'] = username
+        session['room'] = room
+        join_room(room)
+
+        # Load previous messages for the chat room
+        data = read_data_from_json(room)
+        messages = data.get('messages', [])
+        emit('load_messages', {'messages': messages})
 
         # Log connect message as a regular message
-    connect_message = f'{username} has joined the room.'
-    data['messages'].append({'username': 'Server', 'text': connect_message, 'timestamp': int(time())})
-    write_data_to_json(room, data)
+        connect_message = f'{username} has joined the room.'
+        data['messages'].append({'username': 'Server', 'text': connect_message, 'timestamp': int(time())})
+        write_data_to_json(room, data)
 
-    emit('message', {'username': 'Server', 'text': connect_message}, room=room)
-    print('Client connected')
+        emit('message', {'username': 'Server', 'text': connect_message}, room=room)
+        print('Client connected')
 
-    
 
 @socketio.on('disconnect')
 def handle_disconnect():

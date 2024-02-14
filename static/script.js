@@ -7,12 +7,7 @@ document.getElementById('joinForm').addEventListener('submit', function(e) {
     var room = document.getElementById('room').value.trim();
    
     if (username !== '' && room !== '') {
-        if (username = 'Server') {
-            alert('Username cannot be set as "Server". Please choose a different username.');
-        } else {
-            socket.emit('join', {'username': username, 'room': room});
-            window.location.href = '/chat?username=' + encodeURIComponent(username) + '&room=' + encodeURIComponent(room);
-        }
+        socket.emit('join', {'username': username, 'room': room});
+        window.location.href = '/chat?username=' + encodeURIComponent(username) + '&room=' + encodeURIComponent(room);
     }
 });
-
