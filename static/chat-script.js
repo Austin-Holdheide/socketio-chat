@@ -7,16 +7,14 @@ var room = decodeURIComponent(new URLSearchParams(window.location.search).get('r
 socket.emit('join', {'username': username, 'room': room});
 
 socket.on('message', function(data) {
-    var messagesDiv = document.getElementById('messages');
-    messagesDiv.innerHTML += '<p><strong>' + data.username + ':</strong> ' + data.text + '</p>';
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    displayMessage(data);
 });
 
 socket.on('load_messages', function(data) {
     var messagesDiv = document.getElementById('messages');
     messagesDiv.innerHTML = ''; // Clear existing messages
     data.messages.forEach(function(msg) {
-        messagesDiv.innerHTML += '<p><strong>' + msg.username + ':</strong> ' + msg.text + '</p>';
+        displayMessage(msg);
     });
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
 });
@@ -47,4 +45,18 @@ function sendMessage() {
         socket.emit('message', {'text': messageText});
         messageInput.value = '';
     }
+}
+
+function displayMessage(msg) {
+    var messagesDiv = document.getElementById('messages');
+    var messageElement = document.createElement('p');
+    messageElement.innerHTML = '<strong>' + msg.username + ':</strong> ' + msg.text;
+    
+    // Add a specific class for server messages
+    if (msg.username === 'Server') {
+        messageElement.classList.add('server-message');
+    }
+    
+    messagesDiv.appendChild(messageElement);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }

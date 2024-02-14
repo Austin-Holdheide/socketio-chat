@@ -48,3 +48,8 @@ button {
     border-radius: 0 0 8px 8px;
     cursor: pointer;
 }
+
+.server-message {
+    color: #7e7e7e; /* White text for better visibility */
+    font-weight: bold; /* Optional: Make the text bold for server messages */
+}
