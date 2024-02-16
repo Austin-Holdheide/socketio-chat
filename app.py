@@ -16,6 +16,10 @@ JSON_FOLDER = 'chatjson'
 
 blocked = ["Server", "Admin", "BlockedUser"]
 
+# Specify the paths to your SSL certificate and private key
+CERT_PATH = '/path/to/your/certificate.crt'
+KEY_PATH = '/path/to/your/private.key'
+
 # Create the folder if it doesn't exist
 os.makedirs(JSON_FOLDER, exist_ok=True)
 
@@ -114,5 +118,5 @@ def handle_message(data):
 
     emit('message', {'username': username, 'text': text}, room=room)
 
-if __name__ == '__main__':
-    socketio.run(app, debug=False)
+socketio.run(app, debug=False, host='0.0.0.0', port=5000)
+# add ssl_context=(CERT_PATH, KEY_PATH) and change file paths above
